@@ -55,10 +55,10 @@ The integration follows this flow:
 
 ### 1. GitHub
 * **Create a webhook:** In your GitHub repository settings, add a new webhook.
-* **Set the Payload URL:** Point it to your secured Apigee endpoint.
+* **Set the Payload URL:** Point it to your secured Apigee endpoint. Format is `<YOUR-APIGEE-HOSTNAME>/v1/webhook`
 * **Select events:** Choose the specific events you want to receive.
 * **Content type:** Set to `application/json`.
-* **Secret:**  Configure a secret for HMAC verification to enhance security.
+* **Secret:**  Configure a secret for HMAC verification to enhance security (it will be store later into Apigee KVM).
 
 ![GitHub Config](./images/github.png)
 
@@ -75,6 +75,9 @@ The integration follows this flow:
   You must provide this service account when you deploy the API proxy (next step).
 
 * The proxy provided sends logs to Cloud Logging (Log name: apigee). This requires that the service account has also `roles/logging.logWriter` role. Add the role to the service account created or remove the ML-sendLogsCloudLogging policy in the proxy flow.
+
+![Apigee Proxy Trace](./images/proxy-trace.png)
+
 
 ### 4. Apigee & Application Integration
 * Set variable values in install.sh file:
@@ -97,6 +100,12 @@ The integration follows this flow:
 
 ## Test
 
-* Update a file in the 
+* Update a file your GitHub repository
+* Check the Apigee trace or the log file in Google Cloud Log Explorer
 
+![Apigee Proxy Trace](./images/apigee-trace.png)
+
+* Check the Application Integration Log in Application Integration (you can also activate Cloud Logging for this iintegration)
+
+![Apigee Proxy Trace](./images/integration-trace.png)
 
