@@ -6,12 +6,11 @@
 
 ***
 
-## Work in progress...
-
-
 This repository provides a solution for integrating GitHub webhook events with a Kafka topic via Google Apigee and Google Cloud Application Integration. 
 
 It allows you to securely receive webhook notifications from GitHub and seamlessly forward them to Kafka for further processing or analysis.
+
+![Apigee logos](./images/logos.png)
 
 ## Use Case: GitHub Webhook
 
@@ -26,9 +25,11 @@ These events are securely received by an Apigee endpoint and then relayed to a K
 
 ## Architecture
 
+![Architecture](./images/gcp-archi.png)
+
 The integration follows this flow:
 
-[GitHub] --> [Apigee Webhook Endpoint] --> [Application Integration] --> [Kafka Connector] --> [Kafka Topic]
+[GitHub] --> [Apigee Secured Webhook Endpoint] --> [Application Integration] --> [Kafka Connector] --> [Kafka Topic]
 
 
 ## Components
@@ -107,5 +108,5 @@ The integration follows this flow:
 
 * Check the Application Integration Log in Application Integration (you can also activate Cloud Logging for this iintegration)
 
-![Apigee Proxy Trace](./images/integration-trace.png)
+![Apigee Integration Trace](./images/integration-trace.png)
 
