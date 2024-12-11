@@ -66,6 +66,6 @@ The integration follows this flow:
 * **Set the Payload URL:** Point it to your secured Apigee endpoint.
 * **Select events:** Choose the specific events you want to receive.
 * **Content type:** Set to `application/json`.
-* **Secret (optional):**  Configure a secret for HMAC verification to enhance security.
+* **Secret:**  Configure a secret for HMAC verification to enhance security.
 
 
