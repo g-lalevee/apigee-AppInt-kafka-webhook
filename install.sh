@@ -5,8 +5,12 @@ project="bap-emea-apigee-5"
 region="europe-west1"
 env="default-dev"
 
+cd integration
+
 integrationcli integrations apply -p $project -r $region -t $token -f . \
  --skip-connectors --userlabel "cicd" --wait=true
+
+cd ..
 
 apigeecli  apis create bundle --org $project --env $env -t $token \
     --name cl-githubWebhook \
