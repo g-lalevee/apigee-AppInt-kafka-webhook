@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<HMAC name="HMAC-decodeEvent">
+  <DisplayName>HMAC-decodeEvent</DisplayName>
+  <Algorithm>SHA-256</Algorithm>
+  <Message variablePrefix="@" variableSuffix="#">{request.content}</Message>
+  <SecretKey ref="private.webhook_secret"/>
+  <VerificationValue encoding="hex" ref="input_hmac_value"/>
+  <Output encoding="hex">output_hmac_value</Output>
+</HMAC>

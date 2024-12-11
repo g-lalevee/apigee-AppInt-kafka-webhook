@@ -1,0 +1,19 @@
+{
+	"connection_overrides": [
+		{
+			"taskId": "3",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "sl-kafka-demo"
+			}
+		}
+	],
+	"integration_overrides": {
+		"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
+		"enableVariableMasking": false,
+		"cloudLoggingDetails": {
+			"cloudLoggingSeverity": "INFO",
+			"enableCloudLogging": true
+		}
+	}
+}

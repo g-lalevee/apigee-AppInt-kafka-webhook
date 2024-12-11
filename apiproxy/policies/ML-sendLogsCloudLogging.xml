@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MessageLogging continueOnError="false" enabled="true" name="ML-sendLogsCloudLogging">
+  <DisplayName>ML-sendLogsCloudLogging</DisplayName>
+  <CloudLogging>
+    <LogName>projects/{organization.name}/logs/apigee</LogName>
+    <Message contentType="application/json">{log_payload}</Message>
+    <Labels>
+      <Label>
+        <Key>author</Key>
+        <Value>lalevee</Value>
+      </Label>
+    </Labels>
+    <ResourceType>apigee.googleapis.com/Environment</ResourceType>
+  </CloudLogging>
+</MessageLogging>

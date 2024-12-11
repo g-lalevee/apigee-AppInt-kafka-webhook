@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+  <Description/>
+  <FaultRules/>
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response>
+      <Step>
+        <Name>JS-formatLog</Name>
+      </Step>
+    </Response>
+  </PostFlow>
+  <Flows>
+    <Flow name="webhook">
+      <Description>Github Webhook endpoint</Description>
+      <Request>
+        <Step>
+          <Name>KVM-getKey</Name>
+        </Step>
+        <Step>
+          <Name>EV-extractSignature</Name>
+        </Step>
+        <Step>
+          <Name>HMAC-decodeEvent</Name>
+        </Step>
+        <Step>
+          <Name>AM-setIntegrationPayload</Name>
+        </Step>
+        <Step>
+          <Name>SIR-set-integration-request</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="*">
+      <Description>OPTION verb</Description>
+      <Request/>
+      <Response/>
+      <Condition>(request.verb = "OPTIONS")</Condition>
+    </Flow>
+    <Flow name="unknown-path-verb">
+      <Request>
+        <Step>
+          <Name>RF-raiseFault404</Name>
+        </Step>
+      </Request>
+    </Flow>
+  </Flows>
+  <PostClientFlow name="PostClientFlow">
+    <Response>
+      <Step>
+        <Name>ML-sendLogsCloudLogging</Name>
+      </Step>
+    </Response>
+  </PostClientFlow>
+  <HTTPProxyConnection>
+    <BasePath>/v1/webhook2</BasePath>
+    <Properties/>
+    <VirtualHost>default</VirtualHost>
+  </HTTPProxyConnection>
+  <RouteRule name="default">
+    <Condition>(request.verb != "OPTIONS")</Condition>
+    <IntegrationEndpoint>default</IntegrationEndpoint>
+  </RouteRule>
+  <RouteRule name="noroute"/>
+</ProxyEndpoint>

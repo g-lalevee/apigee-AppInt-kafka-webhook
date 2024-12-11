@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-setIntegrationPayload">
+  <DisplayName>AM-setIntegrationPayload</DisplayName>
+  <Properties/>
+  <AssignVariable>
+    <Name>intPayload</Name>
+    <Value>{}</Value>
+    <Template>{"github-event": "{request.header.x-github-event}","github-hook-id": "{request.header.x-github-hook-id}","github-payload":{request.content}}</Template>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

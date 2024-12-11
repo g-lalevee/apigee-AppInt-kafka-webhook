@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SetIntegrationRequest continueOnError="false" enabled="true" name="SIR-set-integration-request">
+  <DisplayName>SIR-Set Integration Request</DisplayName>
+  <ProjectId>bap-emea-apigee-5</ProjectId>
+  <IntegrationName>cl-webhoookToKafka</IntegrationName>
+  <IntegrationRegion>europe-west1</IntegrationRegion>
+  <ApiTrigger>api_trigger/cl-webhoookToKafka_API_1</ApiTrigger>
+  <Parameters>
+    <Parameter name="github-push-event" type="json" ref="intPayload">{}</Parameter>
+  </Parameters>
+</SetIntegrationRequest>

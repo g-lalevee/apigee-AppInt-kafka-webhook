@@ -1,0 +1,241 @@
+{
+	"snapshotNumber": "12",
+	"triggerConfigs": [
+		{
+			"label": "API Trigger",
+			"triggerType": "API",
+			"triggerNumber": "1",
+			"triggerId": "api_trigger/cl-webhoookToKafka2_API_1",
+			"startTasks": [
+				{
+					"taskId": "2"
+				}
+			],
+			"properties": {
+				"Trigger name": "cl-webhoookToKafka_API2_1"
+			}
+		}
+	],
+	"taskConfigs": [
+		{
+			"task": "FieldMappingTask",
+			"taskId": "2",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$github-push-event.github-payload.commits$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_ELEMENT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"url\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$commits0_url$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$github-push-event.github-event$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$github-event$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$github-push-event.github-payload.repository.full_name$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$repository_full_name$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$github-push-event.github-payload.commits$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_ELEMENT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"author.username\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$commits0-author-username$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$templateMessage$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"RESOLVE_TEMPLATE\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_3_connectorInputPayload`.message$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`CONFIG_channel`$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_3_connectorInputPayload`.topic$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Format Kafka Message",
+			"nextTasks": [
+				{
+					"taskId": "3"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "3",
+			"parameters": {
+				"actionName": {
+					"key": "actionName",
+					"value": {
+						"stringValue": "PublishMessage"
+					}
+				},
+				"config": {
+					"key": "config",
+					"value": {}
+				},
+				"connectionName": {
+					"key": "connectionName",
+					"value": {
+						"stringValue": "$`CONFIG_ConnectionName`$"
+					}
+				},
+				"connectionVersion": {
+					"key": "connectionVersion",
+					"value": {
+						"stringValue": "projects/bap-emea-apigee-5/locations/global/providers/default/connectors/apachekafka/versions/1"
+					}
+				},
+				"connectorInputPayload": {
+					"key": "connectorInputPayload",
+					"value": {
+						"stringValue": "$`Task_3_connectorInputPayload`$"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_3_connectorOutputPayload`$"
+					}
+				},
+				"dynamicAuthConfig": {
+					"key": "dynamicAuthConfig",
+					"value": {
+						"jsonValue": "null"
+					}
+				},
+				"entityId": {
+					"key": "entityId",
+					"value": {
+						"stringValue": ""
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": ""
+					}
+				},
+				"executeQueryRequestConfig": {
+					"key": "executeQueryRequestConfig",
+					"value": {}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": ""
+					}
+				},
+				"listEntitiesPageSize": {
+					"key": "listEntitiesPageSize",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"listEntitiesPageToken": {
+					"key": "listEntitiesPageToken",
+					"value": {
+						"stringValue": ""
+					}
+				},
+				"listEntitiesSortByColumns": {
+					"key": "listEntitiesSortByColumns",
+					"value": {
+						"stringArray": {}
+					}
+				},
+				"operation": {
+					"key": "operation",
+					"value": {
+						"stringValue": "EXECUTE_ACTION"
+					}
+				},
+				"timeout": {
+					"key": "timeout",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"useHttpHeaderForDynamicAuthConfig": {
+					"key": "useHttpHeaderForDynamicAuthConfig",
+					"value": {}
+				}
+			},
+			"displayName": "Publish to Kafka ",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		}
+	],
+	"integrationParameters": [
+		{
+			"key": "tempJSON",
+			"dataType": "JSON_VALUE",
+			"defaultValue": {
+				"jsonValue": "{\n}"
+			}
+		},
+		{
+			"key": "repository_full_name",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "github-event",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "commits0-author-username",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "commits0_url",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "kafkaMessage",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "templateMessage",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": "GitHub sent a message on webhook.\nRepository $repository_full_name$, Event type $github-event$, Author $commits0-author-username$, Commit details here $commits0_url$."
+			}
+		},
+		{
+			"key": "github-push-event",
+			"dataType": "JSON_VALUE",
+			"defaultValue": {
+				"jsonValue": "{\n  \"github-event\": \"push\",\n  \"github-hook-id\": \"506000847\",\n  \"github-payload\": {\n    \"ref\": \"refs/heads/main\",\n    \"before\": \"438eaabd4ac1890ceeb67f8f7ac5ed17f9bf1de8\",\n    \"after\": \"d798787c6d71c08db096d82752e729c67c94699f\",\n    \"repository\": {\n      \"id\": 4.69198453E8,\n      \"node_id\": \"R_kgDOG_dmdQ\",\n      \"name\": \"apigee-cicd\",\n      \"full_name\": \"g-lalevee/apigee-cicd\",\n      \"private\": false,\n      \"owner\": {\n        \"name\": \"g-lalevee\",\n        \"email\": \"46923423+g-lalevee@users.noreply.github.com\",\n        \"login\": \"g-lalevee\",\n        \"id\": 4.6923423E7,\n        \"node_id\": \"MDQ6VXNlcjQ2OTIzNDIz\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/46923423?v\\u003d4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/g-lalevee\",\n        \"html_url\": \"https://github.com/g-lalevee\",\n        \"followers_url\": \"https://api.github.com/users/g-lalevee/followers\",\n        \"following_url\": \"https://api.github.com/users/g-lalevee/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/g-lalevee/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/g-lalevee/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/g-lalevee/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/g-lalevee/orgs\",\n        \"repos_url\": \"https://api.github.com/users/g-lalevee/repos\",\n        \"events_url\": \"https://api.github.com/users/g-lalevee/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/g-lalevee/received_events\",\n        \"type\": \"User\",\n        \"site_admin\": false\n      },\n      \"html_url\": \"https://github.com/g-lalevee/apigee-cicd\",\n      \"description\": \"Apigee CICD assets\",\n      \"fork\": false,\n      \"url\": \"https://github.com/g-lalevee/apigee-cicd\",\n      \"forks_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/forks\",\n      \"keys_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/keys{/key_id}\",\n      \"collaborators_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/collaborators{/collaborator}\",\n      \"teams_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/teams\",\n      \"hooks_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/hooks\",\n      \"issue_events_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/issues/events{/number}\",\n      \"events_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/events\",\n      \"assignees_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/assignees{/user}\",\n      \"branches_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/branches{/branch}\",\n      \"tags_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/tags\",\n      \"blobs_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/git/blobs{/sha}\",\n      \"git_tags_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/git/tags{/sha}\",\n      \"git_refs_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/git/refs{/sha}\",\n      \"trees_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/git/trees{/sha}\",\n      \"statuses_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/statuses/{sha}\",\n      \"languages_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/languages\",\n      \"stargazers_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/stargazers\",\n      \"contributors_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/contributors\",\n      \"subscribers_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/subscribers\",\n      \"subscription_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/subscription\",\n      \"commits_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/commits{/sha}\",\n      \"git_commits_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/git/commits{/sha}\",\n      \"comments_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/comments{/number}\",\n      \"issue_comment_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/issues/comments{/number}\",\n      \"contents_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/contents/{+path}\",\n      \"compare_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/compare/{base}...{head}\",\n      \"merges_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/merges\",\n      \"archive_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/{archive_format}{/ref}\",\n      \"downloads_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/downloads\",\n      \"issues_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/issues{/number}\",\n      \"pulls_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/pulls{/number}\",\n      \"milestones_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/milestones{/number}\",\n      \"notifications_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/notifications{?since,all,participating}\",\n      \"labels_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/labels{/name}\",\n      \"releases_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/releases{/id}\",\n      \"deployments_url\": \"https://api.github.com/repos/g-lalevee/apigee-cicd/deployments\",\n      \"created_at\": 1.647118606E9,\n      \"updated_at\": \"2024-10-09T10:16:37Z\",\n      \"pushed_at\": 1.728492705E9,\n      \"git_url\": \"git://github.com/g-lalevee/apigee-cicd.git\",\n      \"ssh_url\": \"git@github.com:g-lalevee/apigee-cicd.git\",\n      \"clone_url\": \"https://github.com/g-lalevee/apigee-cicd.git\",\n      \"svn_url\": \"https://github.com/g-lalevee/apigee-cicd\",\n      \"homepage\": null,\n      \"size\": 85.0,\n      \"stargazers_count\": 13.0,\n      \"watchers_count\": 13.0,\n      \"language\": null,\n      \"has_issues\": true,\n      \"has_projects\": true,\n      \"has_downloads\": true,\n      \"has_wiki\": true,\n      \"has_pages\": false,\n      \"has_discussions\": false,\n      \"forks_count\": 0.0,\n      \"mirror_url\": null,\n      \"archived\": false,\n      \"disabled\": false,\n      \"open_issues_count\": 0.0,\n      \"license\": null,\n      \"allow_forking\": true,\n      \"is_template\": false,\n      \"web_commit_signoff_required\": false,\n      \"topics\": [],\n      \"visibility\": \"public\",\n      \"forks\": 0.0,\n      \"open_issues\": 0.0,\n      \"watchers\": 13.0,\n      \"default_branch\": \"main\",\n      \"stargazers\": 13.0,\n      \"master_branch\": \"main\"\n    },\n    \"pusher\": {\n      \"name\": \"g-lalevee\",\n      \"email\": \"46923423+g-lalevee@users.noreply.github.com\"\n    },\n    \"sender\": {\n      \"login\": \"g-lalevee\",\n      \"id\": 4.6923423E7,\n      \"node_id\": \"MDQ6VXNlcjQ2OTIzNDIz\",\n      \"avatar_url\": \"https://avatars.githubusercontent.com/u/46923423?v\\u003d4\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/g-lalevee\",\n      \"html_url\": \"https://github.com/g-lalevee\",\n      \"followers_url\": \"https://api.github.com/users/g-lalevee/followers\",\n      \"following_url\": \"https://api.github.com/users/g-lalevee/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/g-lalevee/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/g-lalevee/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/g-lalevee/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/g-lalevee/orgs\",\n      \"repos_url\": \"https://api.github.com/users/g-lalevee/repos\",\n      \"events_url\": \"https://api.github.com/users/g-lalevee/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/g-lalevee/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"created\": false,\n    \"deleted\": false,\n    \"forced\": false,\n    \"base_ref\": null,\n    \"compare\": \"https://github.com/g-lalevee/apigee-cicd/compare/438eaabd4ac1...d798787c6d71\",\n    \"commits\": [{\n      \"id\": \"d798787c6d71c08db096d82752e729c67c94699f\",\n      \"tree_id\": \"32904c74a61c35d38e5a7daf8210ef7811ad4b7a\",\n      \"distinct\": true,\n      \"message\": \"Update README.md\\n\\npremier test\",\n      \"timestamp\": \"2024-10-09T18:51:45+02:00\",\n      \"url\": \"https://github.com/g-lalevee/apigee-cicd/commit/d798787c6d71c08db096d82752e729c67c94699f\",\n      \"author\": {\n        \"name\": \"Christophe Lalevee\",\n        \"email\": \"46923423+g-lalevee@users.noreply.github.com\",\n        \"username\": \"g-lalevee\"\n      },\n      \"committer\": {\n        \"name\": \"GitHub\",\n        \"email\": \"noreply@github.com\",\n        \"username\": \"web-flow\"\n      },\n      \"added\": [],\n      \"removed\": [],\n      \"modified\": [\"README.md\"]\n    }],\n    \"head_commit\": {\n      \"id\": \"d798787c6d71c08db096d82752e729c67c94699f\",\n      \"tree_id\": \"32904c74a61c35d38e5a7daf8210ef7811ad4b7a\",\n      \"distinct\": true,\n      \"message\": \"Update README.md\\n\\npremier test\",\n      \"timestamp\": \"2024-10-09T18:51:45+02:00\",\n      \"url\": \"https://github.com/g-lalevee/apigee-cicd/commit/d798787c6d71c08db096d82752e729c67c94699f\",\n      \"author\": {\n        \"name\": \"Christophe Lalevee\",\n        \"email\": \"46923423+g-lalevee@users.noreply.github.com\",\n        \"username\": \"g-lalevee\"\n      },\n      \"committer\": {\n        \"name\": \"GitHub\",\n        \"email\": \"noreply@github.com\",\n        \"username\": \"web-flow\"\n      },\n      \"added\": [],\n      \"removed\": [],\n      \"modified\": [\"README.md\"]\n    }\n  }\n}"
+			},
+			"inputOutputType": "IN",
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"github-payload\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"pusher\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"name\": {\n              \"type\": \"string\"\n            },\n            \"email\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"compare\": {\n          \"type\": \"string\"\n        },\n        \"head_commit\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"committer\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"email\": {\n                  \"type\": \"string\"\n                },\n                \"username\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"removed\": {\n              \"type\": \"array\"\n            },\n            \"tree_id\": {\n              \"type\": \"string\"\n            },\n            \"added\": {\n              \"type\": \"array\"\n            },\n            \"author\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"email\": {\n                  \"type\": \"string\"\n                },\n                \"username\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"distinct\": {\n              \"type\": \"boolean\"\n            },\n            \"modified\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\"\n              }\n            },\n            \"id\": {\n              \"type\": \"string\"\n            },\n            \"message\": {\n              \"type\": \"string\"\n            },\n            \"url\": {\n              \"type\": \"string\"\n            },\n            \"timestamp\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"before\": {\n          \"type\": \"string\"\n        },\n        \"created\": {\n          \"type\": \"boolean\"\n        },\n        \"forced\": {\n          \"type\": \"boolean\"\n        },\n        \"repository\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"allow_forking\": {\n              \"type\": \"boolean\"\n            },\n            \"stargazers_count\": {\n              \"type\": \"number\"\n            },\n            \"is_template\": {\n              \"type\": \"boolean\"\n            },\n            \"pushed_at\": {\n              \"type\": \"number\"\n            },\n            \"subscription_url\": {\n              \"type\": \"string\"\n            },\n            \"language\": {\n              \"type\": \"null\"\n            },\n            \"branches_url\": {\n              \"type\": \"string\"\n            },\n            \"issue_comment_url\": {\n              \"type\": \"string\"\n            },\n            \"labels_url\": {\n              \"type\": \"string\"\n            },\n            \"subscribers_url\": {\n              \"type\": \"string\"\n            },\n            \"releases_url\": {\n              \"type\": \"string\"\n            },\n            \"svn_url\": {\n              \"type\": \"string\"\n            },\n            \"id\": {\n              \"type\": \"number\"\n            },\n            \"has_discussions\": {\n              \"type\": \"boolean\"\n            },\n            \"master_branch\": {\n              \"type\": \"string\"\n            },\n            \"forks\": {\n              \"type\": \"number\"\n            },\n            \"archive_url\": {\n              \"type\": \"string\"\n            },\n            \"git_refs_url\": {\n              \"type\": \"string\"\n            },\n            \"forks_url\": {\n              \"type\": \"string\"\n            },\n            \"visibility\": {\n              \"type\": \"string\"\n            },\n            \"statuses_url\": {\n              \"type\": \"string\"\n            },\n            \"ssh_url\": {\n              \"type\": \"string\"\n            },\n            \"license\": {\n              \"type\": \"null\"\n            },\n            \"full_name\": {\n              \"type\": \"string\"\n            },\n            \"size\": {\n              \"type\": \"number\"\n            },\n            \"languages_url\": {\n              \"type\": \"string\"\n            },\n            \"html_url\": {\n              \"type\": \"string\"\n            },\n            \"collaborators_url\": {\n              \"type\": \"string\"\n            },\n            \"clone_url\": {\n              \"type\": \"string\"\n            },\n            \"name\": {\n              \"type\": \"string\"\n            },\n            \"pulls_url\": {\n              \"type\": \"string\"\n            },\n            \"default_branch\": {\n              \"type\": \"string\"\n            },\n            \"hooks_url\": {\n              \"type\": \"string\"\n            },\n            \"trees_url\": {\n              \"type\": \"string\"\n            },\n            \"tags_url\": {\n              \"type\": \"string\"\n            },\n            \"private\": {\n              \"type\": \"boolean\"\n            },\n            \"contributors_url\": {\n              \"type\": \"string\"\n            },\n            \"has_downloads\": {\n              \"type\": \"boolean\"\n            },\n            \"notifications_url\": {\n              \"type\": \"string\"\n            },\n            \"open_issues_count\": {\n              \"type\": \"number\"\n            },\n            \"description\": {\n              \"type\": \"string\"\n            },\n            \"created_at\": {\n              \"type\": \"number\"\n            },\n            \"watchers\": {\n              \"type\": \"number\"\n            },\n            \"keys_url\": {\n              \"type\": \"string\"\n            },\n            \"deployments_url\": {\n              \"type\": \"string\"\n            },\n            \"has_projects\": {\n              \"type\": \"boolean\"\n            },\n            \"archived\": {\n              \"type\": \"boolean\"\n            },\n            \"has_wiki\": {\n              \"type\": \"boolean\"\n            },\n            \"updated_at\": {\n              \"type\": \"string\"\n            },\n            \"comments_url\": {\n              \"type\": \"string\"\n            },\n            \"stargazers_url\": {\n              \"type\": \"string\"\n            },\n            \"disabled\": {\n              \"type\": \"boolean\"\n            },\n            \"git_url\": {\n              \"type\": \"string\"\n            },\n            \"has_pages\": {\n              \"type\": \"boolean\"\n            },\n            \"owner\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"gists_url\": {\n                  \"type\": \"string\"\n                },\n                \"repos_url\": {\n                  \"type\": \"string\"\n                },\n                \"following_url\": {\n                  \"type\": \"string\"\n                },\n                \"starred_url\": {\n                  \"type\": \"string\"\n                },\n                \"login\": {\n                  \"type\": \"string\"\n                },\n                \"followers_url\": {\n                  \"type\": \"string\"\n                },\n                \"type\": {\n                  \"type\": \"string\"\n                },\n                \"url\": {\n                  \"type\": \"string\"\n                },\n                \"subscriptions_url\": {\n                  \"type\": \"string\"\n                },\n                \"received_events_url\": {\n                  \"type\": \"string\"\n                },\n                \"avatar_url\": {\n                  \"type\": \"string\"\n                },\n                \"events_url\": {\n                  \"type\": \"string\"\n                },\n                \"html_url\": {\n                  \"type\": \"string\"\n                },\n                \"name\": {\n                  \"type\": \"string\"\n                },\n                \"site_admin\": {\n                  \"type\": \"boolean\"\n                },\n                \"id\": {\n                  \"type\": \"number\"\n                },\n                \"gravatar_id\": {\n                  \"type\": \"string\"\n                },\n                \"email\": {\n                  \"type\": \"string\"\n                },\n                \"node_id\": {\n                  \"type\": \"string\"\n                },\n                \"organizations_url\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"commits_url\": {\n              \"type\": \"string\"\n            },\n            \"compare_url\": {\n              \"type\": \"string\"\n            },\n            \"git_commits_url\": {\n              \"type\": \"string\"\n            },\n            \"topics\": {\n              \"type\": \"array\"\n            },\n            \"blobs_url\": {\n              \"type\": \"string\"\n            },\n            \"git_tags_url\": {\n              \"type\": \"string\"\n            },\n            \"merges_url\": {\n              \"type\": \"string\"\n            },\n            \"downloads_url\": {\n              \"type\": \"string\"\n            },\n            \"has_issues\": {\n              \"type\": \"boolean\"\n            },\n            \"web_commit_signoff_required\": {\n              \"type\": \"boolean\"\n            },\n            \"url\": {\n              \"type\": \"string\"\n            },\n            \"contents_url\": {\n              \"type\": \"string\"\n            },\n            \"mirror_url\": {\n              \"type\": \"null\"\n            },\n            \"milestones_url\": {\n              \"type\": \"string\"\n            },\n            \"teams_url\": {\n              \"type\": \"string\"\n            },\n            \"fork\": {\n              \"type\": \"boolean\"\n            },\n            \"issues_url\": {\n              \"type\": \"string\"\n            },\n            \"stargazers\": {\n              \"type\": \"number\"\n            },\n            \"events_url\": {\n              \"type\": \"string\"\n            },\n            \"issue_events_url\": {\n              \"type\": \"string\"\n            },\n            \"assignees_url\": {\n              \"type\": \"string\"\n            },\n            \"open_issues\": {\n              \"type\": \"number\"\n            },\n            \"watchers_count\": {\n              \"type\": \"number\"\n            },\n            \"node_id\": {\n              \"type\": \"string\"\n            },\n            \"homepage\": {\n              \"type\": \"null\"\n            },\n            \"forks_count\": {\n              \"type\": \"number\"\n            }\n          }\n        },\n        \"base_ref\": {\n          \"type\": \"null\"\n        },\n        \"ref\": {\n          \"type\": \"string\"\n        },\n        \"deleted\": {\n          \"type\": \"boolean\"\n        },\n        \"sender\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"gists_url\": {\n              \"type\": \"string\"\n            },\n            \"repos_url\": {\n              \"type\": \"string\"\n            },\n            \"following_url\": {\n              \"type\": \"string\"\n            },\n            \"starred_url\": {\n              \"type\": \"string\"\n            },\n            \"login\": {\n              \"type\": \"string\"\n            },\n            \"followers_url\": {\n              \"type\": \"string\"\n            },\n            \"type\": {\n              \"type\": \"string\"\n            },\n            \"url\": {\n              \"type\": \"string\"\n            },\n            \"subscriptions_url\": {\n              \"type\": \"string\"\n            },\n            \"received_events_url\": {\n              \"type\": \"string\"\n            },\n            \"avatar_url\": {\n              \"type\": \"string\"\n            },\n            \"events_url\": {\n              \"type\": \"string\"\n            },\n            \"html_url\": {\n              \"type\": \"string\"\n            },\n            \"site_admin\": {\n              \"type\": \"boolean\"\n            },\n            \"id\": {\n              \"type\": \"number\"\n            },\n            \"gravatar_id\": {\n              \"type\": \"string\"\n            },\n            \"node_id\": {\n              \"type\": \"string\"\n            },\n            \"organizations_url\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"commits\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"committer\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\"\n                  },\n                  \"email\": {\n                    \"type\": \"string\"\n                  },\n                  \"username\": {\n                    \"type\": \"string\"\n                  }\n                }\n              },\n              \"removed\": {\n                \"type\": \"array\"\n              },\n              \"tree_id\": {\n                \"type\": \"string\"\n              },\n              \"added\": {\n                \"type\": \"array\"\n              },\n              \"author\": {\n                \"type\": \"object\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\"\n                  },\n                  \"email\": {\n                    \"type\": \"string\"\n                  },\n                  \"username\": {\n                    \"type\": \"string\"\n                  }\n                }\n              },\n              \"distinct\": {\n                \"type\": \"boolean\"\n              },\n              \"modified\": {\n                \"type\": \"array\",\n                \"items\": {\n                  \"type\": \"string\"\n                }\n              },\n              \"id\": {\n                \"type\": \"string\"\n              },\n              \"message\": {\n                \"type\": \"string\"\n              },\n              \"url\": {\n                \"type\": \"string\"\n              },\n              \"timestamp\": {\n                \"type\": \"string\"\n              }\n            }\n          }\n        },\n        \"after\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"github-hook-id\": {\n      \"type\": \"string\"\n    },\n    \"github-event\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+		},
+		{
+			"key": "myInputPayload",
+			"dataType": "JSON_VALUE"
+		},
+		{
+			"key": "`Task_3_connectorInputPayload`",
+			"dataType": "JSON_VALUE",
+			"producer": "1_3",
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"topic\": {\n      \"type\": \"string\",\n      \"description\": \"The name of the Apache Kafka topic.\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Message to be published.\"\n    },\n    \"schemaName\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Name of the schema.\"\n    },\n    \"validate\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to do schema validation.\",\n      \"default\": false\n    },\n    \"key\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"The message key given as a base64 encoded string.\"\n    },\n    \"partition\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"The partition the message is assigned to. Must be valid for the given topic. Automatically assigned by the native client if not set.\"\n    },\n    \"hasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to publish message as bytes.\",\n      \"default\": false\n    },\n    \"messageBytes\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Bytes message to be published as base64 encoded string.\"\n    }\n  },\n  \"required\": [\"topic\", \"message\"]\n}"
+		},
+		{
+			"key": "`Task_3_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"producer": "1_3",
+			"jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+		}
+	],
+	"integrationConfigParameters": [
+		{
+			"parameter": {
+				"key": "`CONFIG_channel`",
+				"dataType": "STRING_VALUE",
+				"defaultValue": {
+					"stringValue": "github"
+				},
+				"displayName": "`CONFIG_channel`"
+			},
+			"value": {
+				"stringValue": "github"
+			}
+		},
+		{
+			"parameter": {
+				"key": "`CONFIG_ConnectionName`",
+				"dataType": "STRING_VALUE",
+				"defaultValue": {
+					"stringValue": "projects/bap-emea-apigee-5/locations/europe-west1/connections/sl-kafka-demo"
+				},
+				"displayName": "`CONFIG_ConnectionName`"
+			},
+			"value": {
+				"stringValue": "projects/bap-emea-apigee-5/locations/europe-west1/connections/sl-kafka-demo"
+			}
+		}
+	],
+	"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
+	"cloudLoggingDetails": {
+		"cloudLoggingSeverity": "INFO",
+		"enableCloudLogging": true
+	}
+}

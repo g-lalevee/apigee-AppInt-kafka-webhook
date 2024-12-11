@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables continueOnError="false" enabled="true" name="EV-extractSignature">
+  <DisplayName>EV-extractSignature</DisplayName>
+  <Properties/>
+  <Variable name="request.header.X-Hub-Signature-256">
+    <Pattern>sha256={input_hmac_value}</Pattern>
+  </Variable>
+</ExtractVariables>
