@@ -87,11 +87,13 @@ The integration follows this flow:
   * **env** = Apigee environment name to deploy proxy
   * **github_secret** = GitHub webhook secret to be store in Apigee KVM (created step #1)
   * **apigee_deployment_sa** = GCP Servce Account used by Apigee proxy to access to Application Integration and Cloud Logging (created step #3)
+
 * Update Application Integration Configuration Variable file: `./integration/config-variables/config.json`
   * Set variables values:
     * **CONFIG_ConnectionName**: the name of the Kafka connection created in step #2 (format: `projects/<PROJECT_NAME>/locations/<REGION>/connections/<CONNECTION_NAME>`
 	* **CONFIG_channel**: the name of the Kafka target topic
 
+![Apigee Proxy Trace](./images/integration.png)
 
 ## Deployment
 
