@@ -38,6 +38,11 @@ The integration follows this flow:
 * **Integration Connector:** Enables Application Integration to publish messages to a Kafka topic.
 * **Kafka Topic:** The destination where GitHub events are stored for consumption. Hosted in your Kafka server.
 
+## Prerequisites
+
+* Google Cloud Account: You must have valid Google Cloud accounts and associated roles to configure both Apigee and Integration
+* `apigeecli`: Installation instructions: [apigeecli](https://github.com/apigee/apigeecli)
+* `integrationcli`: Installation instructions: [application-integration-management-toolkit](https://github.com/GoogleCloudPlatform/application-integration-management-toolkit)
 
 ## Code Structure
 
@@ -48,24 +53,50 @@ The integration follows this flow:
 
 ## Setup and Configuration
 
-### 1. Apigee
-* **Create an API proxy:**  Configure it to accept `POST` requests from GitHub.
-* **Secure the proxy:** Implement API keys, OAuth, or other authentication mechanisms.
-* **Validate webhook payloads:**  Use policies (e.g., HMAC verification) to ensure the integrity of incoming data.
-* **Transform data (optional):**  Use policies to extract or modify data within the payload before sending it to Application Integration.
-
-### 2. Application Integration
-* **Create an integration:** Configure it to receive data from the Apigee proxy.
-* **Map data:** Define how to transform the GitHub webhook payload to match the desired format for Kafka.
-
-### 3. Integration Connector
-* **Configure the connector:** Provide Kafka broker address, topic name, authentication details, and other necessary settings.
-
-### 4. GitHub
+### 1. GitHub
 * **Create a webhook:** In your GitHub repository settings, add a new webhook.
 * **Set the Payload URL:** Point it to your secured Apigee endpoint.
 * **Select events:** Choose the specific events you want to receive.
 * **Content type:** Set to `application/json`.
 * **Secret:**  Configure a secret for HMAC verification to enhance security.
+
+![GitHub Config](./images/github.png)
+
+### 2. Integration Connector
+* **Create and configure the connector:** Provide Kafka broker address, topic name, authentication details, and other necessary settings. See [Apache Kafka Connector Documentation.](https://cloud.google.com/integration-connectors/docs/connectors/apachekafka/configure)
+
+
+### 3. GCP
+
+* Create a Google service account in the same Google Cloud project where your Apigee organization was created, and do the following:
+  * Assign the Application Integration Invoker role (`roles/integrations.applicationIntegrationInvokerRole`) to the service account.
+  * Allow your user account (principal) to attach service accounts to resources with the `iam.serviceAccounts.actAs` permission. 
+
+  You must provide this service account when you deploy the API proxy (next step).
+
+* The proxy provided sends logs to Cloud Logging (Log name: apigee). This requires that the service account has also `roles/logging.logWriter` role. Add the role to the service account created or remove the ML-sendLogsCloudLogging policy in the proxy flow.
+
+### 4. Apigee & Application Integration
+* Set variable values in install.sh file:
+  * **project** = name of the GCP project hosing both Apigee and Application Integration instances
+  * **region** = GCP region to deploy the integration 
+  * **env** = Apigee environment name to deploy proxy
+  * **github_secret** = GitHub webhook secret to be store in Apigee KVM (created step #1)
+  * **apigee_deployment_sa** = GCP Servce Account used by Apigee proxy to access to Application Integration and Cloud Logging (created step #3)
+* Update Application Integration Configuration Variable file: `./integration/config-variables/config.json`
+  * Set variables values:
+    * **CONFIG_ConnectionName**: the name of the Kafka connection created in step #2 (format: `projects/<PROJECT_NAME>/locations/<REGION>/connections/<CONNECTION_NAME>`
+	* **CONFIG_channel**: the name of the Kafka target topic
+
+
+## Deployment
+
+* Run Bash script file `install.sh`
+* Et voilà !
+
+
+## Test
+
+* Update a file in the 
 
 
